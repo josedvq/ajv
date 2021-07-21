@@ -1,4 +1,4 @@
-// import {resolveRef} from "../../compile"
+import {resolveRef} from "../../compile"
 import type {CodeKeywordDefinition, AnySchemaObject, KeywordErrorDefinition} from "../../types"
 import type {KeywordCxt} from "../../compile/validate"
 import {_, getProperty, Name} from "../../compile/codegen"
@@ -74,6 +74,11 @@ const def: CodeKeywordDefinition = {
           const {baseId, schemaEnv: env, self} = it
           const {root} = env
           const resolved = resolveRef.call(self, root, baseId, sch.$ref)
+          if(resolved === undefined) {
+            throw new Error(
+              `discriminator: could not resolve $ref`
+            )
+          }
           resolveTagName(resolved, i)
           continue
         }
