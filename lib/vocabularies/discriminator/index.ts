@@ -1,4 +1,4 @@
-import {resolveRef} from "../../compile"
+// import {resolveRef} from "../../compile"
 import type {CodeKeywordDefinition, AnySchemaObject, KeywordErrorDefinition} from "../../types"
 import type {KeywordCxt} from "../../compile/validate"
 import {_, getProperty, Name} from "../../compile/codegen"
