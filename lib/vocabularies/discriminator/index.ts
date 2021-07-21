@@ -73,12 +73,7 @@ const def: CodeKeywordDefinition = {
         if(sch.$ref) {
           const {baseId, schemaEnv: env, self} = it
           const {root} = env
-          const resolved = resolveRef.call(self, root, baseId, sch.$ref)
-          if(resolved === undefined) {
-            throw new Error(
-              `discriminator: could not resolve $ref`
-            )
-          }
+          const resolved = resolveRef.call(self, root, baseId, sch.$ref) as AnySchemaObject
           resolveTagName(resolved, i)
           continue
         }
