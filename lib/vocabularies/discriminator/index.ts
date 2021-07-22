@@ -3,6 +3,9 @@ import type {CodeKeywordDefinition, AnySchemaObject, KeywordErrorDefinition} fro
 import type {KeywordCxt} from "../../compile/validate"
 import {_, getProperty, Name} from "../../compile/codegen"
 import {DiscrError, DiscrErrorObj} from "../discriminator/types"
+import MissingRefError from "../../compile/ref_error"
+import { SchemaEnv } from "../../compile/index"
+import { SchemaObject } from "../../types/index"
 
 export type DiscriminatorError = DiscrErrorObj<DiscrError.Tag> | DiscrErrorObj<DiscrError.Mapping>
 
@@ -70,14 +73,22 @@ const def: CodeKeywordDefinition = {
           continue
         }
 
+
         if(sch.$ref) {
           const {baseId, schemaEnv: env, self} = it
           const {root} = env
-          const resolved = resolveRef.call(self, root, baseId, sch.$ref) as AnySchemaObject
-          resolveTagName(resolved, i)
+          const resolved = resolveRef.call(self, root, baseId, sch.$ref)
+          if (resolved === undefined) throw new MissingRefError(baseId, sch.$ref)
+
+          if (resolved instanceof SchemaEnv) {
+            resolveTagName(resolved.schema as SchemaObject, i)
+          } else {
+            resolveTagName(resolved as SchemaObject, i)
+          }
           continue
         }
 
+        
         throw new Error(
           `discriminator: oneOf schemas must define properties/${tagName}`
         )
