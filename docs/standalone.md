@@ -12,7 +12,7 @@ This functionality in Ajv v7 supersedes deprecated package ajv-pack that can be 
 
 ## Usage with CLI
 
-In most cases you would use this functionality via [ajv-cli](https://github.com/jessedc/ajv-cli) (>= 4.0.0) to generate module that exports validation function.
+In most cases you would use this functionality via [ajv-cli](https://github.com/ajv-validator/ajv-cli) (>= 4.0.0) to generate module that exports validation function.
 
 ```sh
 npm install -g ajv-cli
@@ -21,7 +21,7 @@ ajv compile -s schema.json -o validate_schema.js
 
 `validate_schema.js` will contain the module exporting validation function that can be bundled into your application.
 
-See [ajv-cli](https://github.com/jessedc/ajv-cli) docs for additional information.
+See [ajv-cli](https://github.com/ajv-validator/ajv-cli) docs for additional information.
 
 ## Usage from code
 
@@ -32,7 +32,7 @@ npm install ajv
 ```javascript
 const Ajv = require("ajv") // version >= v7.0.0
 const ajv = new Ajv({code: {source: true}}) // this option is required to generate standalone code
-const standaloneCode = require("ajv/dist/standalone")
+const standaloneCode = require("ajv/dist/standalone").default
 
 const schema = {
   $id: "https://example.com/object.json",
@@ -70,7 +70,9 @@ const requireFromString = require("require-from-string")
 const standaloneValidate = requireFromString(moduleCode) // for a single default export
 ```
 
-Ajv package should still be a run-time dependency for most schemas, but generated modules can only depend on code in [runtime](https://github.com/ajv-validator/ajv/tree/master/lib/runtime) folder, so the whole Ajv will not be included in the bundle (or executed) if you require the modules with standalone validation code from your application code.
+### Requirement at runtime
+
+To run the standalone generated functions, the Ajv package should still be a run-time dependency for most schemas, but generated modules can only depend on code in [runtime](https://github.com/ajv-validator/ajv/tree/master/lib/runtime) folder, so the whole Ajv will not be included in the bundle (or executed) if you require the modules with standalone validation code from your application code.
 
 ## Configuration and limitations
 
